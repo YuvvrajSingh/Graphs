@@ -31,18 +31,39 @@ async function makeCommit(message, date) {
   await git.commit(message, undefined, { "--date": date });
 }
 
-// Example: batch commits for a week (X axis) and days (Y axis)
-async function commitArt(xWeeks = 1, yDays = 7) {
-  for (let x = 0; x < xWeeks; x++) {
-    for (let y = 0; y < yDays; y++) {
-      const offset = x * 7 + y;
-      const date = getGitHubDate(offset);
-      await makeCommit(`Art commit (${x},${y})`, date);
-      await writeCommitData({ x, y, date });
+// Generate a random number of commits for a given day (0-4)
+function getRandomCommits() {
+  return random.int(0, 4);
+}
+
+// Generate a random time for a commit within a day
+function getRandomTime(date) {
+  const hour = random.int(8, 22); // Working hours
+  const minute = random.int(0, 59);
+  const second = random.int(0, 59);
+  return moment(date)
+    .set({ hour, minute, second })
+    .format("YYYY-MM-DDTHH:mm:ss");
+}
+
+// Generate a legit-looking contribution pattern for the last N weeks
+async function commitLegitArt(weeks = 8, daysPerWeek = 7) {
+  for (let w = 0; w < weeks; w++) {
+    for (let d = 0; d < daysPerWeek; d++) {
+      // Skip some days (simulate weekends/inactivity)
+      if (random.float() < 0.2) continue;
+      const offset = w * 7 + d;
+      const baseDate = moment().subtract(offset, "days");
+      const commitsToday = getRandomCommits();
+      for (let c = 0; c < commitsToday; c++) {
+        const date = getRandomTime(baseDate);
+        await makeCommit(`Legit commit (${w},${d},${c})`, date);
+        await writeCommitData({ w, d, c, date });
+      }
     }
   }
   await git.push();
 }
 
-// Run the art commit generator
-commitArt(2, 7); // Example: 2 weeks, 7 days
+// Run the legit art commit generator
+commitLegitArt(8, 7); // 8 weeks, 7 days per week
