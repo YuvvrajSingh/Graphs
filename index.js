@@ -47,7 +47,7 @@ function getRandomTime(date) {
 }
 
 // Generate a legit-looking contribution pattern for the last N weeks
-async function commitLegitArt(weeks = 8, daysPerWeek = 7) {
+async function commitLegitArt(weeks = 52, daysPerWeek = 7) {
   for (let w = 0; w < weeks; w++) {
     for (let d = 0; d < daysPerWeek; d++) {
       // Skip some days (simulate weekends/inactivity)
@@ -65,5 +65,5 @@ async function commitLegitArt(weeks = 8, daysPerWeek = 7) {
   await git.push();
 }
 
-// Run the legit art commit generator
-commitLegitArt(8, 7); // 8 weeks, 7 days per week
+// Run the legit art commit generator for the past year
+commitLegitArt(52, 7); // 52 weeks, 7 days per week
