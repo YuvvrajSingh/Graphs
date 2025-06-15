@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Automate commits to create art on the GitHub contribution graph.",
   "main": "index.js",
-  "type": "module",  "scripts": {
+  "type": "module",
+  "scripts": {
     "start": "node index.js",
     "daily": "node daily-commit.js",
     "setup": "powershell -ExecutionPolicy Bypass -File setup-scheduler.ps1"
